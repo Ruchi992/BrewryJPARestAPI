@@ -39,8 +39,7 @@ public class BreweriesController {
     public Resource retrieveBreweries(@PathVariable("breweriesID") int breweriesID) {
         Resource<Breweries> resouce = new Resource(BreweriesService.getBreweriesByID(breweriesID));
 
-//        Class classtype= this.getClass();
-//        List<Breweries> list =getBreweries() ;
+
         
         ControllerLinkBuilder linkTo = ControllerLinkBuilder.linkTo(methodOn(this.getClass()).getBreweries());
         resouce.add(linkTo.withRel("getBreweries"));
@@ -50,7 +49,9 @@ public class BreweriesController {
     @GetMapping
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     public List<Breweries> getBreweries() {
-        return Service.getAllBreweries();
+        int pagenumber=1-1;
+        int PAGESIZE = 5;
+        return Service.getAllBreweries().subList(pagenumber*PAGESIZE, PAGESIZE);
 
     }
 
