@@ -5,15 +5,11 @@
  */
 package com.ruchi.breweriesrestapi;
 
-import java.awt.print.Pageable;
-import java.security.Provider.Service;
 import java.util.List;
-import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,23 +33,21 @@ public class BreweriesController {
 
     @Autowired
     BreweriesService Service;
-    
+
     /**
      *
      * @param breweriesID
      * @return
      */
-    @GetMapping(value ="/heatoas/{breweriesID}",produces = MediaTypes.HAL_JSON_VALUE)
-    
-    public Resource<Breweries> retrieveBreweries(@PathVariable("breweriesID") int breweriesID) {
-        Resource<Breweries> resouce = new Resource<Breweries>(BreweriesService.getBreweriesByID(breweriesID));
+    @GetMapping(value = "/heatoas/{breweriesID}", produces = MediaTypes.HAL_JSON_VALUE)
 
-        ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass.()).getBreweries()
-        );
-       resouce.add(linkTo.withRel("getBreweries"));
+    public Resource retrieveBreweries(@PathVariable("breweriesID") int breweriesID) {
+        Resource<Breweries> resouce = new Resource(BreweriesService.getBreweriesByID(breweriesID));
+
+        ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass.(), getBreweries());
+        resouce.add(linkTo.withRel("getBreweries"));
         return resouce;
-    }      
-    
+    }
 
     @GetMapping
     @Produces(MediaType.APPLICATION_JSON_VALUE)
@@ -64,48 +58,40 @@ public class BreweriesController {
 
     @GetMapping("/{breweriesID}")
     @Produces(MediaType.APPLICATION_JSON_VALUE)
-    public Breweries getBreweries(@PathVariable("breweriesID")int breweriesID){        
+    public Breweries getBreweries(@PathVariable("breweriesID") int breweriesID) {
         //Breweries brewery = Service.getBreweriesByID(breweriesID);
         //System.out.println(brewery.getName());
-       return Service.getBreweriesByID(breweriesID);
-    }    
+        return Service.getBreweriesByID(breweriesID);
+    }
+
     @DeleteMapping("/{id}")
-     @Produces(MediaType.APPLICATION_JSON_VALUE)
+    @Produces(MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public int deleteBreweries(@PathVariable("id")int id){
+    public int deleteBreweries(@PathVariable("id") int id) {
         return Service.deleteBreweries(id);
-    }     
+    }
+
     @PostMapping(value = "/Create")
     @ResponseStatus(HttpStatus.CREATED)
     public Breweries create(@RequestBody Breweries b) {
         System.out.println("Inserting");
         return Service.InsertBreweries(b);
-    }          
-    
+    }
+
     @PutMapping(value = "/{id}")
-     @ResponseStatus(HttpStatus.OK) 
-	public void Update(@PathVariable("id")int id, @RequestBody Breweries b) {
-		Service.updateBreweries(id, b);
-                
-        }
+    @ResponseStatus(HttpStatus.OK)
+    public void Update(@PathVariable("id") int id, @RequestBody Breweries b) {
+        Service.updateBreweries(id, b);
+
+    }
 
     private class getClass {
 
         public getClass() {
         }
     }
-        
-}   
-     
-  
 
-    
-
-
+}
 
 //</editor-fold>
-      
-                 
-    
-    
 
