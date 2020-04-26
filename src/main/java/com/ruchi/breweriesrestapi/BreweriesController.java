@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,18 +34,15 @@ public class BreweriesController {
 
     @Autowired
     BreweriesService Service;
-
-    /**
-     *
-     * @param breweriesID
-     * @return
-     */
-    @GetMapping(value = "/heatoas/{breweriesID}", produces = MediaTypes.HAL_JSON_VALUE)
-
+   
+    @GetMapping(value="/heatoas/{breweriesID}", produces = MediaTypes.HAL_JSON_VALUE)
     public Resource retrieveBreweries(@PathVariable("breweriesID") int breweriesID) {
         Resource<Breweries> resouce = new Resource(BreweriesService.getBreweriesByID(breweriesID));
 
-        ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass.(), getBreweries());
+//        Class classtype= this.getClass();
+//        List<Breweries> list =getBreweries() ;
+        
+        ControllerLinkBuilder linkTo = ControllerLinkBuilder.linkTo(methodOn(this.getClass()).getBreweries());
         resouce.add(linkTo.withRel("getBreweries"));
         return resouce;
     }
