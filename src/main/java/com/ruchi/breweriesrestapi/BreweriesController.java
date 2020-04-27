@@ -41,16 +41,17 @@ public class BreweriesController {
     }
 
     @GetMapping(value = "hateoas", produces = MediaTypes.HAL_JSON_VALUE)
-    public Resource<Breweries> getBeers() {
+    public Resource<Breweries> getBreweries1() {
         List<Breweries> breweries = service.getAllBreweries();
         for (Breweries brewie : breweries) {
             int brewieId = brewie.getId();
             Link selfLink = ControllerLinkBuilder.linkTo(this.getClass()).slash(brewieId).withSelfRel();
-            breweries.add(selfLink);
+            brewie.add(selfLink);
             ControllerLinkBuilder.linkTo(methodOn(this.getClass()).getBreweries(brewieId));
         }
         Link link = ControllerLinkBuilder.linkTo(this.getClass()).withSelfRel();
-        Resource<Breweries> result = new Resource<Breweries>(breweries, link);
+        Resource<Breweries> result;
+        result= new Resource<Breweries>(breweries, link);
         return result;
     }
 
