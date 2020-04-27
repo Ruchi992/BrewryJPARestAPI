@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,22 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Ruchi Devi
  */
 @RestController
-@RequestMapping("/AllBeer")
-public class BeerAPI {
-   @Autowired
-   BeersService Service;
-   @GetMapping
+@RequestMapping("/rest/BreweriesGeocode")
+public class BreweriesGeocodeAPI {
+
+    @Autowired
+    BreweriesGeocodeService Service;
+
+    @GetMapping
     @Produces(MediaType.APPLICATION_JSON_VALUE)
-    public List<Beers> getBeers() {
-        return Service.getAllBeers();
+    public List<BreweriesGeocode> getAllBreweriesGeocode() {
+        return Service.getAllBreweriesGeocode();
 
     }
-     @GetMapping("/{BeersID}")
-    @Produces(MediaType.APPLICATION_JSON_VALUE)
-    public Beers getBeers(@PathVariable("BeersID")int beersID){        
-        //Breweries brewery = Service.getBreweriesByID(breweriesID);
-        //System.out.println(brewery.getName());
-       return Service.getBeersByID(beersID);
-    }
-    
+
 }

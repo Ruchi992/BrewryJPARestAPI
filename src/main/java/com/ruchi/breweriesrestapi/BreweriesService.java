@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ruchi.breweriesrestapi;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -75,10 +69,7 @@ public class BreweriesService {
         }
         System.out.println("end");
         return null;
-    } 
-
-    
-     
+    }   
     /**
      *
      * @param breweriesID
@@ -164,6 +155,24 @@ public class BreweriesService {
         }
        
     } 
+     public void getPaginated(int size, int page){
+       EntityManager em = DBUtil.getEMF().createEntityManager();
+       try{
+       EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        
+        //em.merge(b);
+        //em.merge(id);        
+        tx.commit();
+
+       }catch (Exception ex) {
+           ex.printStackTrace();
+            System.out.println(ex);
+        } finally {
+            em.close();
+        }
+       
+    }
 
     
 }

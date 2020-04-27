@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ruchi.breweriesrestapi;
 
 import java.util.List;
@@ -29,18 +24,16 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Ruchi Devi
  */
 @RestController
-@RequestMapping("/AllBrewies")
+@RequestMapping("/rest/AllBrewies")
 public class BreweriesController {
 
     @Autowired
     BreweriesService Service;
-   
-    @GetMapping(value="/heatoas/{breweriesID}", produces = MediaTypes.HAL_JSON_VALUE)
+
+    @GetMapping(value = "/heatoas/{breweriesID}", produces = MediaTypes.HAL_JSON_VALUE)
     public Resource retrieveBreweries(@PathVariable("breweriesID") int breweriesID) {
         Resource<Breweries> resouce = new Resource(BreweriesService.getBreweriesByID(breweriesID));
 
-
-        
         ControllerLinkBuilder linkTo = ControllerLinkBuilder.linkTo(methodOn(this.getClass()).getBreweries());
         resouce.add(linkTo.withRel("getBreweries"));
         return resouce;
@@ -49,10 +42,20 @@ public class BreweriesController {
     @GetMapping
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     public List<Breweries> getBreweries() {
-        int pagenumber=1-1;
-        int PAGESIZE = 5;
-        return Service.getAllBreweries().subList(pagenumber*PAGESIZE, PAGESIZE);
+        return Service.getAllBreweries();
 
+    }
+
+     @GetMapping("/Page/{pageNumber}")
+    @Produces(MediaType.APPLICATION_JSON_VALUE)
+    public List<Breweries> getPageOfBreweries(@PathVariable("pageNumber") int pageNumber) {
+        int startPageIndex = pageNumber - 1;
+        
+        final int PAGESIZE = 5;
+        
+        int startIndex = startPageIndex * PAGESIZE;
+        int endIndex = startIndex+ PAGESIZE;
+        return Service.getAllBreweries().subList(startIndex, endIndex);
     }
 
     @GetMapping("/{breweriesID}")
@@ -82,12 +85,6 @@ public class BreweriesController {
     public void Update(@PathVariable("id") int id, @RequestBody Breweries b) {
         Service.updateBreweries(id, b);
 
-    }
-
-    private class getClass {
-
-        public getClass() {
-        }
     }
 
 }

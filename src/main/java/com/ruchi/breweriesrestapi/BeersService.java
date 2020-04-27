@@ -8,6 +8,7 @@ package com.ruchi.breweriesrestapi;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,4 +69,58 @@ public class BeersService {
           System.out.println("list1" + beersID);
         return beers;                  
     }
+    public static int deleteBeers(int id) {
+        System.out.println("PropertyDB DeleteProperty " + id);
+        EntityManager em = DBUtil.getEMF().createEntityManager();        
+        String query = "DELETE FROM Beers b WHERE b.id = :id";                
+        TypedQuery<Beers> tq = em.createQuery(query, Beers.class);
+        int result = 0;        
+        try {
+            
+            EntityTransaction tx = em.getTransaction();
+            tx.begin();
+            result = tq.setParameter("id", id).executeUpdate();
+            tx.commit();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        } finally {
+            em.close();
+        }
+        
+        return result;
+    }
+     public  Beers  InsertBeers(Beers  b){
+       EntityManager em = DBUtil.getEMF().createEntityManager();
+       try{
+       EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        System.out.println("brewery" + b);
+        em.persist(b);       
+        tx.commit();
+       }catch (Exception ex) {
+           ex.printStackTrace();
+            System.out.println(ex);
+        } finally {
+            em.close();
+        }
+       return b;
+    }     
+      public  Beers  UpdateBeers( int id, Beers  b){
+       EntityManager em = DBUtil.getEMF().createEntityManager();
+       try{
+       EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        System.out.println("beer" + b);
+        em.merge(b);
+        em.merge(id);
+        tx.commit();
+       }catch (Exception ex) {
+           ex.printStackTrace();
+            System.out.println(ex);
+        } finally {
+            em.close();
+        }
+       return b;
+    }
 }
+
