@@ -22,6 +22,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.springframework.hateoas.ResourceSupport;
 
 /**
  *
@@ -47,7 +48,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Breweries.findByLastMod", query = "SELECT b FROM Breweries b WHERE b.lastMod = :lastMod"),
     @NamedQuery(name = "Breweries.findByCreditLimit", query = "SELECT b FROM Breweries b WHERE b.creditLimit = :creditLimit"),
     @NamedQuery(name = "Breweries.findByEmail", query = "SELECT b FROM Breweries b WHERE b.email = :email")})
-public class Breweries extends RepresentationModel<Breweries>  implements Serializable {
+public class Breweries extends ResourceSupport  implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -158,7 +159,7 @@ public class Breweries extends RepresentationModel<Breweries>  implements Serial
         this.email = email;
     }
 
-    public Integer getId() {
+    public Integer getBrewiesId() {
         return id;
     }
 

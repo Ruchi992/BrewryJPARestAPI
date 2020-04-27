@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import org.springframework.http.HttpStatus;
@@ -40,18 +41,19 @@ public class BreweriesController {
         return resouce;
     }
 
-    @GetMapping(value = "hateoas", produces = MediaTypes.HAL_JSON_VALUE)
-    public Resource<Breweries> getBreweries1() {
+   @GetMapping(value = "hateoas", produces = MediaTypes.HAL_JSON_VALUE)
+    public Resources<Breweries> getBreweries1()
+    {
         List<Breweries> breweries = service.getAllBreweries();
-        for (Breweries brewie : breweries) {
-            int brewieId = brewie.getId();
+        for(Breweries brewie : breweries)
+        {
+            int brewieId = brewie.getBrewiesId();
             Link selfLink = ControllerLinkBuilder.linkTo(this.getClass()).slash(brewieId).withSelfRel();
             brewie.add(selfLink);
             ControllerLinkBuilder.linkTo(methodOn(this.getClass()).getBreweries(brewieId));
         }
         Link link = ControllerLinkBuilder.linkTo(this.getClass()).withSelfRel();
-        Resource<Breweries> result;
-        result= new Resource<Breweries>(breweries, link);
+        Resources<Breweries> result = new Resources<>(breweries, link);
         return result;
     }
 
