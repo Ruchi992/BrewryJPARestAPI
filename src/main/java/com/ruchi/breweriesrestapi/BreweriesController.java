@@ -3,6 +3,7 @@ package com.ruchi.breweriesrestapi;
 import java.util.List;
 import javax.ws.rs.Produces;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BreweriesController {
 
     @Autowired
-    BreweriesService Service;
+    BreweriesService service;
 
     @GetMapping(value = "/heatoas/{breweriesID}", produces = MediaTypes.HAL_JSON_VALUE)
     public Resource retrieveBreweries(@PathVariable("breweriesID") int breweriesID) {
@@ -39,51 +40,65 @@ public class BreweriesController {
         return resouce;
     }
 
+    @GetMapping(value = "hateoas", produces = MediaTypes.HAL_JSON_VALUE)
+    public Resource<Breweries> getBeers() {
+        List<Breweries> breweries = service.getAllBreweries();
+        for (Breweries brewie : breweries) {
+            int brewieId = brewie.getId();
+            Link selfLink = ControllerLinkBuilder.linkTo(this.getClass()).slash(brewieId).withSelfRel();
+            breweries.add(selfLink);
+            ControllerLinkBuilder.linkTo(methodOn(this.getClass()).getBreweries(brewieId));
+        }
+        Link link = ControllerLinkBuilder.linkTo(this.getClass()).withSelfRel();
+        Resource<Breweries> result = new Resource<Breweries>(breweries, link);
+        return result;
+    }
+
     @GetMapping
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     public List<Breweries> getBreweries() {
-        return Service.getAllBreweries();
+        return service.getAllBreweries();
 
     }
 
-     @GetMapping("/Page/{pageNumber}")
+    @GetMapping("/Page/{pageNumber}")
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     public List<Breweries> getPageOfBreweries(@PathVariable("pageNumber") int pageNumber) {
         int startPageIndex = pageNumber - 1;
-        
+
         final int PAGESIZE = 5;
-        
+
         int startIndex = startPageIndex * PAGESIZE;
-        int endIndex = startIndex+ PAGESIZE;
-        return Service.getAllBreweries().subList(startIndex, endIndex);
+        int endIndex = startIndex + PAGESIZE;
+        return service.getAllBreweries().subList(startIndex, endIndex);
     }
 
     @GetMapping("/{breweriesID}")
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     public Breweries getBreweries(@PathVariable("breweriesID") int breweriesID) {
-        //Breweries brewery = Service.getBreweriesByID(breweriesID);
+        //Breweries brewery = service.getBreweriesByID(breweriesID);
         //System.out.println(brewery.getName());
-        return Service.getBreweriesByID(breweriesID);
+        return service.getBreweriesByID(breweriesID);
     }
 
     @DeleteMapping("/{id}")
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public int deleteBreweries(@PathVariable("id") int id) {
-        return Service.deleteBreweries(id);
+        return service.deleteBreweries(id);
     }
 
     @PostMapping(value = "/Create")
     @ResponseStatus(HttpStatus.CREATED)
     public Breweries create(@RequestBody Breweries b) {
         System.out.println("Inserting");
-        return Service.InsertBreweries(b);
+        return service.InsertBreweries(b);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void Update(@PathVariable("id") int id, @RequestBody Breweries b) {
-        Service.updateBreweries(id, b);
+        service.updateBreweries(id, b);
 
     }
 
