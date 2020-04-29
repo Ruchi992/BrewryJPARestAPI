@@ -19,28 +19,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/Taste")
 public class TasteController {
-    
-    @GetMapping(value = "/code/{BreweryId}", produces = MediaType.IMAGE_PNG_VALUE)
+
+    @GetMapping(value = "/code1/{BreweryId}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<BufferedImage> okResponse(BufferedImage image) {
         return new ResponseEntity<>(image, HttpStatus.OK);
     }
-    @GetMapping(value = "/code/{BreweryId}", produces = MediaType.IMAGE_PNG_VALUE)
+
+    @GetMapping(value = "/code2/{BreweryId}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<BufferedImage> barbecueEAN13Barcode(@PathVariable("barcode") String barcode) throws Exception {
         EAN13Writer barcodeWriter = new EAN13Writer();
         BitMatrix bitMatrix = barcodeWriter.encode(barcode, BarcodeFormat.EAN_13, 300, 150);
 
         //example from https://www.baeldung.com/java-generating-barcodes-qr-codes
         //FIXME example does not say what static import was used to get okResponse() method.
-          return okResponse(MatrixToImageWriter.toBufferedImage(bitMatrix));
-        
+        return okResponse(MatrixToImageWriter.toBufferedImage(bitMatrix));
+
     }
-    
-    	@RequestMapping(value = "code/{BreweryId}", method = RequestMethod.GET)
-	public void qrcode(@PathVariable("BreweryId") int BreweryId, HttpServletResponse response) throws Exception {
-		response.setContentType("image/png");
-		OutputStream outputStream = response.getOutputStream();
-		outputStream.write(ZXingHelper.getQRCodeImage(id, 200, 200));
-		outputStream.flush();
-		outputStream.close();
-	}
+
+    @RequestMapping(value = "code3/{BreweryId}", method = RequestMethod.GET)
+    public void qrcode(@PathVariable("BreweryId") int BreweryId, HttpServletResponse response) throws Exception {
+        response.setContentType("image/png");
+        OutputStream outputStream = response.getOutputStream();
+        String id = "5";
+        outputStream.write(ZXingHelper.getQRCodeImage(id, 200, 200));
+        outputStream.flush();
+        outputStream.close();
+    }
 }

@@ -45,7 +45,7 @@ public class MapServlet extends HttpServlet {
         String name = "(512) Brewing Company";
         float latitude = -30.2234f;
         float longitude = -97.7697f;
-        String apiKey="=ALAN use your YOUR_API_KEY";
+        String apiKey = "AIzaSyA0kZEl_6sDWjt38LvlJZL5ld_EUgihqdo";       
 
         //get or pass in those values in real life
         HttpSession session = request.getSession();

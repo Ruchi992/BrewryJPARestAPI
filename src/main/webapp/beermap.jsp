@@ -20,6 +20,7 @@
         </style>
     </head>
     <body>
+        <p>Brewery: ${name}</p>
         <div id="map"></div>
         <script>
             // Note: This example requires that you consent to location sharing when
@@ -28,10 +29,16 @@
             // locate you.
             var map, infoWindow;
             function initMap() {
-                map = new google.maps.Map(document.getElementById('map'), {
-                    center: {lat: ${latitude}, ${longitude}},
-                    zoom: 6
-                });
+                map = new google.maps.Map(document.getElementById('map'), 
+                {
+                    center:
+                    {
+                        lat: ${latitude}, 
+                        lng: ${longitude}
+                    },
+                    zoom: 16
+                }
+                    );
                 infoWindow = new google.maps.InfoWindow;
                 // Try HTML5 geolocation.
                 if (navigator.geolocation) {
@@ -60,8 +67,7 @@
                 infoWindow.open(map);
             }
         </script>
-        <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key${apiKey}&callback=initMap">
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap">
         </script>
     </body>
 </html>
